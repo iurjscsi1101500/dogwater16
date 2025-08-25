@@ -55,9 +55,11 @@ uint16_t xor (const uint16_t a, const uint16_t b, struct Flags *flags);
 uint16_t not (const uint16_t a, struct Flags *flags);
 uint16_t cmp (const uint16_t a, const uint16_t b, struct Flags *flags);
 uint16_t shl (const uint16_t a, const uint16_t n, struct Flags *flags);
+uint16_t shr (const uint16_t a, const uint16_t n, struct Flags *flags);
 uint16_t sar (const uint16_t a, const uint16_t n, struct Flags *flags);
 
 void nop(const struct CPU *cpu);
+void jmp(struct CPU *cpu, const uint16_t target_pc);
 void jz(struct CPU *cpu, const uint16_t target_pc);
 void jnz(struct CPU *cpu, const uint16_t target_pc);
 void jn(struct CPU *cpu, const uint16_t target_pc);

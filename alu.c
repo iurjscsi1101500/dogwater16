@@ -96,8 +96,14 @@ inline uint16_t shl(const uint16_t a, const uint16_t n, struct Flags *flags) {
     set_flags(flags, (uint16_t) a << n);
     return a << n;
 }
-inline uint16_t sar(const uint16_t a, const uint16_t n, struct Flags *flags) {
+inline uint16_t shr(const uint16_t a, const uint16_t n, struct Flags *flags) {
     if (n >= 16) ERR("shr overflow\n");
+    if (n == 0) return a;
+    set_flags(flags, (uint16_t) a >> n);
+    return a >> n;
+}
+inline uint16_t sar(const uint16_t a, const uint16_t n, struct Flags *flags) {
+    if (n >= 16) ERR("sar overflow\n");
     if (n == 0) return a;
     const uint16_t main_result = (uint16_t)((int16_t)a >> n);
     set_flags(flags, main_result);
