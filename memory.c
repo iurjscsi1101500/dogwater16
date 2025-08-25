@@ -19,13 +19,11 @@ inline uint16_t write(const struct CPU *cpu,const uint16_t mem ,const uint16_t r
     return cpu->mem[mem + offset];
 }
 inline uint16_t push(struct CPU *cpu, const uint16_t r_src) {
-    cpu->sp--;
-    cpu->mem[cpu->sp] = cpu->regs[r_src & LR];
+    cpu->mem[--cpu->sp] = cpu->regs[r_src & LR];
     return cpu->mem[cpu->sp];
 }
 inline uint16_t pop(struct CPU *cpu, const uint16_t r_dest) {
-    cpu->regs[r_dest & LR] = cpu->mem[cpu->sp];
-    cpu->sp--;
+    cpu->regs[r_dest & LR] = cpu->mem[cpu->sp++];
     return cpu->regs[r_dest & LR];
 }
 inline void swap_r(struct CPU *cpu, const uint16_t r_dest, const uint16_t r_src) {
