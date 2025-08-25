@@ -5,19 +5,27 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <stdlib.h>
+#include <unistd.h>
 
-#define ERR(x) do { fprintf(stderr, "%s", x); exit(-1); } while(0)
+#define ERR(fmt, ...) fprintf(stderr, fmt, __VA_ARGS__); exit(-1);
+
 #define MAX 0xFFFF
 #define INSTR_LEN 2
-#define LR 0x7
 
+enum INTERRUPTS {
+    KEYBOARD_READ,
+    KEYBOARD_WRITE,
+    NMI, //this will shut down cpu
+    MEMORY_FAULT,
+    WAIT_MS
+};
 struct Flags {
     bool Zero, Negative;
 };
 struct CPU{
     uint16_t pc;
     uint16_t sp;
-    uint16_t regs[16];   // reg[7] used for stack call/ret
+    uint16_t regs[16];   // reg[7] used for stack call/ret, reg[2] used by interrupts
     struct Flags flags;
     uint16_t *mem;
     size_t mem_size;
@@ -63,4 +71,9 @@ uint16_t push(struct CPU *cpu, const uint16_t r_src);
 uint16_t pop(struct CPU *cpu, const uint16_t r_dest);
 void swap_r(struct CPU *cpu, const uint16_t r_dest, const uint16_t r_src);
 void swap_m(struct CPU *cpu, const uint16_t m_dest, const uint16_t m_src);
+
+void call_interrupt(struct CPU *cpu, const enum INTERRUPTS interrupt);
+#define CHECK_MEM(x, cpu) ((x) >= (cpu)->mem_size)
+
+
 #endif //DOGWATER_16_MAIN_H
