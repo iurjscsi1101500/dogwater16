@@ -26,6 +26,7 @@ struct CPU{
     uint16_t pc;
     uint16_t sp;
     uint16_t regs[16];   // reg[7] used for stack call/ret, reg[2] used by interrupts
+    uint16_t keyboard_reg;
     struct Flags flags;
     uint16_t *mem;
     size_t mem_size;
