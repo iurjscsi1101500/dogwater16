@@ -28,3 +28,13 @@ inline uint16_t pop(struct CPU *cpu, const uint16_t r_dest) {
     cpu->sp--;
     return cpu->regs[r_dest & LR];
 }
+inline void swap_r(struct CPU *cpu, const uint16_t r_dest, const uint16_t r_src) {
+    const uint16_t temp = cpu->regs[r_src];
+    cpu->regs[r_src] = cpu->regs[r_dest];
+    cpu->regs[r_dest] = temp;
+}
+inline void swap_m(struct CPU *cpu, const uint16_t m_dest, const uint16_t m_src) {
+    const uint16_t temp = cpu->mem[m_src];
+    cpu->mem[m_src] = cpu->mem[m_dest];
+    cpu->mem[m_dest] = temp;
+}

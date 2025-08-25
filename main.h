@@ -61,5 +61,6 @@ uint16_t read(struct CPU *cpu, const uint16_t reg ,const uint16_t m_src, const u
 uint16_t write(const struct CPU *cpu, const uint16_t mem ,const uint16_t r_src, const uint16_t offset);
 uint16_t push(struct CPU *cpu, const uint16_t r_src);
 uint16_t pop(struct CPU *cpu, const uint16_t r_dest);
-
+void swap_r(struct CPU *cpu, const uint16_t r_dest, const uint16_t r_src);
+void swap_m(struct CPU *cpu, const uint16_t m_dest, const uint16_t m_src);
 #endif //DOGWATER_16_MAIN_H
