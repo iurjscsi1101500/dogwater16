@@ -19,6 +19,18 @@ enum INTERRUPTS {
     MEMORY_FAULT,
     WAIT_MS
 };
+enum OPCODE {
+    OP_NOP,
+    OP_ADD, OP_SUB, OP_INC, OP_DEC,
+    OP_MUL, OP_DIV, OP_MOD,
+    OP_AND, OP_NAND, OP_NOR, OP_OR, OP_XOR,
+    OP_NOT, OP_CMP,
+    OP_SHL, OP_SHR, OP_SAR,
+    OP_JMP, OP_JZ, OP_JNZ, OP_JN, OP_CALL, OP_RET, OP_IRET,
+    OP_MOV, OP_LI, OP_READ, OP_WRITE, OP_PUSH, OP_POP, OP_SWAP_R, OP_SWAP_M,
+    OP_INT, OP_WAIT, OP_GET_KEY, OP_OUT_KEY, OP_MEM_FAULT, OP_NMI
+};
+
 struct Flags {
     bool Zero, Negative;
 };
