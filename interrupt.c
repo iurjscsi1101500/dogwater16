@@ -1,6 +1,9 @@
 #include "main.h"
 
 inline void call_interrupt(struct CPU *cpu, const enum INTERRUPTS interrupt) {
+    if (!cpu->interrupts_enabled) {
+        ERR("Tried to use interrupt when interrupt was disabled\n");
+    }
     switch (interrupt) {
     case KEYBOARD_READ: {
         scanf("%hu", &cpu->keyboard_reg);
@@ -13,7 +16,7 @@ inline void call_interrupt(struct CPU *cpu, const enum INTERRUPTS interrupt) {
     case NMI: exit(0);
 
     case MEMORY_FAULT: {
-        fprintf(stderr, "MEMORY FAULT AT %u", cpu->regs[2]);
+        fprintf(stderr, "MEMORY FAULT AT %u\n", cpu->regs[2]);
         exit(-1);
     } break;
 

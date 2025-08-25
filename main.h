@@ -31,6 +31,7 @@ struct CPU{
     uint16_t *mem;
     size_t mem_size;
     bool halted;
+    bool interrupts_enabled;
 };
 
 static inline void set_flags(struct Flags *flags, const uint16_t result) {
@@ -39,6 +40,12 @@ static inline void set_flags(struct Flags *flags, const uint16_t result) {
 }
 static inline uint16_t fetch(const struct CPU *cpu, const uint16_t addr) {
     return cpu->mem[(addr >> 1) % cpu->mem_size];;
+}
+static inline void disable_interrupts(struct CPU *cpu) {
+    cpu->interrupts_enabled = false;
+}
+static inline void enable_interrupts(struct CPU *cpu) {
+    cpu->interrupts_enabled = true;
 }
 uint16_t add (const uint16_t a, const uint16_t b, struct Flags *flags);
 uint16_t sub (const uint16_t a, const uint16_t b, struct Flags *flags);
