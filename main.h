@@ -7,10 +7,10 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#define ERR(fmt, ...) fprintf(stderr, fmt, __VA_ARGS__); exit(-1);
-
+#define ERR(x) do { fprintf(stderr, "%s", x); exit(-1); } while(0)
 #define MAX 0xFFFF
 #define INSTR_LEN 2
+#define LR 0x7
 
 enum INTERRUPTS {
     KEYBOARD_READ,
@@ -65,8 +65,9 @@ void ret(struct CPU *cpu);
 
 void mov(struct CPU *cpu, const uint16_t r_dest, const uint16_t r_src);
 void li(struct CPU *cpu, const uint16_t r_dest, const uint16_t r_val);
-uint16_t read(struct CPU *cpu, const uint16_t reg ,const uint16_t m_src, const uint16_t offset);
-uint16_t write(const struct CPU *cpu, const uint16_t mem ,const uint16_t r_src, const uint16_t offset);
+//do this otherwise gcc throws
+uint16_t read_(struct CPU *cpu, const uint16_t reg ,const uint16_t m_src, const uint16_t offset);
+uint16_t write_(struct CPU *cpu, const uint16_t mem ,const uint16_t r_src, const uint16_t offset);
 uint16_t push(struct CPU *cpu, const uint16_t r_src);
 uint16_t pop(struct CPU *cpu, const uint16_t r_dest);
 void swap_r(struct CPU *cpu, const uint16_t r_dest, const uint16_t r_src);

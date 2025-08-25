@@ -2,7 +2,7 @@ CC      := gcc
 CFLAGS  := -Wall -Wextra -std=c11 -O2
 LDFLAGS := 
 
-OBJS = alu.o control_flow.o memory.o main.o
+OBJS = alu.o control_flow.o memory.o main.o interrupt.o
 
 TARGET = emu
 
