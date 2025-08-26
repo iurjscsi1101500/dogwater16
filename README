@@ -59,6 +59,8 @@ RET          - Return from subroutine
 DATA MOVEMENT
 -------------
 MOV          - Move register to register
+MOVK         - Move register to keyboard register
+RMOVK        - Move keyboard register to register
 LI           - Load immediate into register
 READ         - Read from memory
 WRITE        - Write to memory
