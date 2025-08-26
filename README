@@ -1,12 +1,12 @@
 dogwater32 - A CPU emulator with a typed asm
 
-Instruction Word Layout (MD not used)
+Instruction Word Layout
 
- 15            10 9             6 5             2 1 0
-+----------------+---------------+---------------+---+-------------------+
-|     OPCODE     |      RD       |      RS       |MD |       UNUSED      |
-+----------------+---------------+---------------+---+-------------------+
-   6 bits          4 bits          4 bits        2 bits                  16 bits
+
++----------------+---------------+---------------+-----------------------+
+|     OPCODE     |      RD       |      RS       |       UNUSED          |
++----------------+---------------+---------------+-----------------------+
+   6 bits          4 bits          4 bits        18 bits
 
 Instruction Set
 
@@ -69,6 +69,11 @@ POP          - Pop from stack to register
 SWAP_R       - Swap registers
 SWAP_M       - Swap with memory
 
+VARIABLES AND DEFINES
+---------------------
+#define DEFINE_NAME #0xVAL
+VAR_NAME: dd VAR_VAL
+
 REGISTERS
 ---------
  0  : R0   (GP)
@@ -78,7 +83,7 @@ REGISTERS
  4  : R4   (GP)
  5  : R5   (GP)
  6  : R6   (GP)
- 7  : R7   (SP - stack pointer for CALL/RET)
+ 7  : R7   (LR - pointer for CALL/RET)
  8  : R8   (GP)
  9  : R9   (GP)
 10  : R10  (GP)
