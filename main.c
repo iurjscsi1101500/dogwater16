@@ -92,7 +92,6 @@ int cpu_step(struct CPU *cpu){
 }
 
 int main(int argc, char **argv) {
-    //still not complete because no assembler
     struct CPU cpu = {0};
     if (argc < 2) { fprintf(stderr,"usage: %s program.bin\n",argv[0]); return -1; }
     cpu_init(&cpu, 0x100000);
