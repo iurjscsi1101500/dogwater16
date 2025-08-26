@@ -1,12 +1,12 @@
-dogwater16 - A CPU emulator with a typed asm
+dogwater32 - A CPU emulator with a typed asm
 
 Instruction Word Layout (MD not used)
 
  15            10 9             6 5             2 1 0
-+----------------+---------------+---------------+---+
-|     OPCODE     |      RD       |      RS       |MD |
-+----------------+---------------+---------------+---+
-   6 bits          4 bits          4 bits        2 bits
++----------------+---------------+---------------+---+-------------------+
+|     OPCODE     |      RD       |      RS       |MD |       UNUSED      |
++----------------+---------------+---------------+---+-------------------+
+   6 bits          4 bits          4 bits        2 bits                  16 bits
 
 Instruction Set
 

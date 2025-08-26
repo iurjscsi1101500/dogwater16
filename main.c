@@ -1,10 +1,8 @@
 #include "main.h"
-#include <stdio.h>
-#include <stdint.h>
 
-void cpu_init(struct CPU *cpu, const uint16_t mem_size) {
+void cpu_init(struct CPU *cpu, const uint32_t mem_size) {
     cpu->mem_size = mem_size;
-    cpu->mem=calloc(cpu->mem_size, sizeof(uint16_t));
+    cpu->mem=calloc(cpu->mem_size, sizeof(uint32_t));
     if (!cpu->mem) ERR("mem init failed\n");
     cpu->pc = 0;
     cpu->sp = cpu->mem_size-1;
@@ -26,10 +24,10 @@ void open_file(const char* file_name, struct CPU *cpu) {
 int cpu_step(struct CPU *cpu){
     if(cpu->halted) return 0;
 
-    const uint16_t insn=fetch(cpu);
-    const uint16_t op=OPC(insn);
-    const uint16_t rd=RD(insn);
-    const uint16_t rs=RS(insn);
+    const uint32_t insn=fetch(cpu);
+    const uint32_t op=OPC(insn);
+    const uint32_t rd=RD(insn);
+    const uint32_t rs=RS(insn);
 
     switch(op){
         case OP_NOP: nop(cpu); return 1;

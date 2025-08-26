@@ -6,7 +6,7 @@ inline void call_interrupt(struct CPU *cpu, const enum INTERRUPTS interrupt) {
     }
     switch (interrupt) {
     case KEYBOARD_READ: {
-        scanf("%hu", &cpu->keyboard_reg);
+        scanf("%u", &cpu->keyboard_reg);
     } break;
 
     case KEYBOARD_WRITE: {
