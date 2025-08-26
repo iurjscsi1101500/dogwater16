@@ -24,6 +24,7 @@ inline void call_interrupt(struct CPU *cpu, const enum INTERRUPTS interrupt) {
         usleep(cpu->regs[2] * 1000);
     } break;
 
+    default: ERR("UNKNOWN INTERRUPT\n");
     }
     return;
 }
