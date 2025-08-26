@@ -2,25 +2,28 @@
 
 void cpu_init(struct CPU *cpu, const uint32_t mem_size) {
     cpu->mem_size = mem_size;
-    cpu->mem=calloc(cpu->mem_size, sizeof(uint32_t));
+    cpu->mem = calloc(cpu->mem_size, sizeof(uint32_t));
     if (!cpu->mem) ERR("mem init failed\n");
     cpu->pc = 0;
-    cpu->sp = cpu->mem_size-1;
+    cpu->sp = cpu->mem_size - 1;
     cpu->regs[7] = cpu->sp;
+    cpu->halted = false;
+    cpu->flags = (struct Flags){0};
     enable_interrupts(cpu);
 }
 void open_file(const char* file_name, struct CPU *cpu) {
     FILE *f = fopen(file_name, "rb");
     if (!f) ERR("cant open file\n");
     for (size_t i = 0; i < cpu->mem_size; ++i) {
-        unsigned char byte[2];
-        size_t n = fread(byte, 1, 2, f);
+        unsigned char b[4];
+        size_t n = fread(b, 1, 4, f);
         if (n == 0) break;
-        if (n != 2) ERR("bad program size\n");
-        cpu->mem[i]=byte[0] | byte[1] << 8;
+        if (n != 4) ERR("bad program size (not multiple of 4)\n");
+        cpu->mem[i] = (uint32_t)b[0] | ((uint32_t)b[1] << 8) | ((uint32_t)b[2] << 16) | ((uint32_t)b[3] << 24);
     }
     fclose(f);
 }
+
 int cpu_step(struct CPU *cpu){
     if(cpu->halted) return 0;
 
