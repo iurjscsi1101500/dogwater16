@@ -32,6 +32,8 @@ int cpu_step(struct CPU *cpu){
     const uint32_t rd=RD(insn);
     const uint32_t rs=RS(insn);
 
+    if (rd > 15 || rs > 15) ERR("bad register\n");
+    if (op > 51) ERR("bad opcode\n");
     switch(op){
         case OP_NOP: nop(cpu); return 1;
         case OP_ADD: cpu->regs[rd]=add(cpu->regs[rd],cpu->regs[rs],&cpu->flags); return 1;
@@ -93,7 +95,7 @@ int main(int argc, char **argv) {
     //still not complete because no assembler
     struct CPU cpu = {0};
     if (argc < 2) { fprintf(stderr,"usage: %s program.bin\n",argv[0]); return -1; }
-    cpu_init(&cpu, 0x6969);
+    cpu_init(&cpu, 0x100000);
     open_file(argv[1], &cpu);
     while (!cpu.halted) cpu_step(&cpu);
     free(cpu.mem);
