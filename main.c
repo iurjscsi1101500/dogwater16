@@ -11,6 +11,18 @@ void cpu_init(struct CPU *cpu, const uint16_t mem_size) {
     cpu->regs[7] = cpu->sp;
     enable_interrupts(cpu);
 }
+void open_file(const char* file_name, struct CPU *cpu) {
+    FILE *f = fopen(file_name, "rb");
+    if (!f) ERR("cant open file\n");
+    for (size_t i = 0; i < cpu->mem_size; ++i) {
+        unsigned char byte[2];
+        size_t n = fread(byte, 1, 2, f);
+        if (n == 0) break;
+        if (n != 2) ERR("bad program size\n");
+        cpu->mem[i]=byte[0] | byte[1] << 8;
+    }
+    fclose(f);
+}
 int cpu_step(struct CPU *cpu){
     if(cpu->halted) return 0;
 
@@ -75,6 +87,13 @@ int cpu_step(struct CPU *cpu){
 }
 
 int main(int argc, char **argv) {
-    //TODO
+    //still not complete because no assembler
+    struct CPU cpu = {0};
+    if (argc < 2) { fprintf(stderr,"usage: %s program.bin\n",argv[0]); return -1; }
+    cpu_init(&cpu, 0x6969);
+    open_file(argv[1], &cpu);
+    while (!cpu.halted) cpu_step(&cpu);
+    free(cpu.mem);
+    return 0;
     return 0;
 }
