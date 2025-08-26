@@ -31,7 +31,7 @@ enum OPCODE {
     OP_NOT, OP_CMP, OP_CMPI,
     OP_SHL, OP_SHLI, OP_SHR, OP_SHRI, OP_SAR, OP_SARI,
     OP_JMP, OP_JZ, OP_JNZ, OP_JN, OP_CALL, OP_RET,
-    OP_MOV, OP_LI, OP_READ, OP_WRITE, OP_PUSH, OP_POP, OP_SWAP_R, OP_SWAP_M,
+    OP_MOV, OP_MOVK, OP_LI, OP_READ, OP_WRITE, OP_PUSH, OP_POP, OP_SWAP_R, OP_SWAP_M,
     OP_INT, OP_DIS_INT, OP_ENA_INT,
     OP_HLT
 };
@@ -43,7 +43,7 @@ struct CPU{
     uint32_t pc;
     uint32_t sp;
     uint32_t regs[16];   // reg[7] used for stack call/ret, reg[2] used by interrupts
-    uint32_t keyboard_reg;
+    uint8_t keyboard_reg;
     struct Flags flags;
     uint32_t *mem;
     size_t mem_size;

@@ -72,6 +72,7 @@ int cpu_step(struct CPU *cpu){
         case OP_CALL: call(cpu,fetch(cpu)); return 3;
         case OP_RET: ret(cpu); return 3;
         case OP_MOV: mov(cpu,rd,rs); return 1;
+        case OP_MOVK: mov(cpu,cpu->keyboard_reg, rs); return 1;
         case OP_LI: li(cpu,rd,fetch(cpu)); return 2;
         case OP_READ: (void)read_(cpu,rd,rs,fetch(cpu)); return 2;
         case OP_WRITE: (void)write_(cpu,rd,rs,fetch(cpu)); return 2;

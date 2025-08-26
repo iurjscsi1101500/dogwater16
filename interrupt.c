@@ -6,11 +6,11 @@ inline void call_interrupt(struct CPU *cpu, const enum INTERRUPTS interrupt) {
     }
     switch (interrupt) {
     case KEYBOARD_READ: {
-        scanf("%u", &cpu->keyboard_reg);
+        scanf("%c", &cpu->keyboard_reg);
     } break;
 
     case KEYBOARD_WRITE: {
-        printf("%c", (char) cpu->keyboard_reg);
+        printf("%c", cpu->keyboard_reg);
     } break;
 
     case NMI: exit(0);
