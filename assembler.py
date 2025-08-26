@@ -1,5 +1,5 @@
 #guys this was written by chatgpt because i am too lazy to write an assmbler
-import os
+import os, sys
 OPC = {
  "NOP":0,"ADD":1,"ADDI":2,"SUB":3,"SUBI":4,"INC":5,"DEC":6,
  "MUL":7,"MULI":8,"DIV":9,"DIVI":10,"MOD":11,"MODI":12,
@@ -109,7 +109,11 @@ def assemble(lines):
         if SZ[M]==2: out+=u32(extra if extra is not None else 0)
     return bytes(out)
 
-name = input("Enter Filename: ")
+if len(sys.argv) != 2:
+    print(f"Usage: python3 {sys.argv[0]} filename")
+    sys.exit(1)
+
+name = sys.argv[1]
 with open(name, "r") as f:
     bin_data = assemble(f.read())
     bin_name = os.path.splitext(name)[0] + ".bin"
