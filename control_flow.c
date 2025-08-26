@@ -15,7 +15,7 @@ inline void jn(struct CPU *cpu, const uint32_t target_pc) {
     if (cpu->flags.Negative) {cpu->pc = target_pc;}
 }
 inline void call(struct CPU *cpu, const uint32_t target_pc) {
-    cpu->regs[LR] = (cpu->pc + INSTR_LEN);
+    cpu->regs[LR] = cpu->pc;
     cpu->pc = target_pc;
 }
 inline void ret(struct CPU *cpu) {
