@@ -1,3 +1,102 @@
 dogwater16 - A CPU emulator with a typed asm
 
-currently incomplete
+Instruction Word Layout (MD not used)
+
+ 15            10 9             6 5             2 1 0
++----------------+---------------+---------------+---+
+|     OPCODE     |      RD       |      RS       |MD |
++----------------+---------------+---------------+---+
+   6 bits          4 bits          4 bits        2 bits
+
+Instruction Set
+
+CONTROL
+-------
+NOP         - No operation
+HLT         - Halt execution
+INT         - Software interrupt
+DIS_INT     - Disable interrupts
+ENA_INT     - Enable interrupts
+
+ARITHMETIC
+----------
+ADD / ADDI  - Add register or immediate
+SUB / SUBI  - Subtract register or immediate
+INC / DEC   - Increment / decrement
+MUL / MULI  - Multiply register or immediate
+DIV / DIVI  - Divide register or immediate
+MOD / MODI  - Modulo register or immediate
+
+BITWISE / LOGIC
+---------------
+AND / ANDI   - Bitwise AND
+NAND / NANDI - Bitwise NAND
+NOR / NORI   - Bitwise NOR
+OR / ORI     - Bitwise OR
+XOR / XORI   - Bitwise XOR
+NOT          - Bitwise NOT
+
+COMPARISON
+----------
+CMP          - Compare registers
+CMPI         - Compare register with immediate
+
+SHIFT / ROTATE
+--------------
+SHL / SHLI   - Shift left (logical)
+SHR / SHRI   - Shift right (logical)
+SAR / SARI   - Shift right (arithmetic)
+
+CONTROL FLOW
+------------
+JMP          - Jump to address
+JZ           - Jump if zero flag set
+JNZ          - Jump if zero flag not set
+JN           - Jump if negative flag set
+CALL         - Call subroutine
+RET          - Return from subroutine
+
+DATA MOVEMENT
+-------------
+MOV          - Move register to register
+LI           - Load immediate into register
+READ         - Read from memory
+WRITE        - Write to memory
+PUSH         - Push register to stack
+POP          - Pop from stack to register
+SWAP_R       - Swap registers
+SWAP_M       - Swap with memory
+
+REGISTERS
+---------
+ 0  : R0   (GP)
+ 1  : R1   (GP)
+ 2  : R2   (Reserved - used by interrupts)
+ 3  : R3   (GP)
+ 4  : R4   (GP)
+ 5  : R5   (GP)
+ 6  : R6   (GP)
+ 7  : R7   (SP - stack pointer for CALL/RET)
+ 8  : R8   (GP)
+ 9  : R9   (GP)
+10  : R10  (GP)
+11  : R11  (GP)
+12  : R12  (GP)
+13  : R13  (GP)
+14  : R14  (GP)
+15  : R15  (GP)
+
+SPECIAL REGISTER
+----------------
+ keyboard_reg : Holds input/output state for keyboard device
+
+INTERRUPTS
+----------
+
+There are currently 5 Interrupts which are:
+
+KEYBOARD_READ (INT 0x0): reads a char to keyboard_reg
+KEYBOARD_WRITE (INT 0x1): prints a char from keyboard_reg
+NMI (INT 0x2): this will stop the cpu without any error message
+MEMORY_FAULT (INT 0x3): used by memory function, this should not be used by programs
+WAIT_MS (INT 0x4) : this will wait till R2 ms
