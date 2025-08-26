@@ -11,6 +11,10 @@
 #define MAX 0xFFFF
 #define INSTR_LEN 2
 #define LR 0x7
+#define CHECK_MEM(x, cpu) ((x) >= (cpu)->mem_size)
+#define OPC(w) (((w) >> 10) & 0x3F)
+#define RD(w)  (((w) >> 6)  & 0x0F)
+#define RS(w)  (((w) >> 2)  & 0x0F)
 
 enum INTERRUPTS {
     KEYBOARD_READ,
@@ -21,14 +25,14 @@ enum INTERRUPTS {
 };
 enum OPCODE {
     OP_NOP,
-    OP_ADD, OP_SUB, OP_INC, OP_DEC,
-    OP_MUL, OP_DIV, OP_MOD,
-    OP_AND, OP_NAND, OP_NOR, OP_OR, OP_XOR,
-    OP_NOT, OP_CMP,
-    OP_SHL, OP_SHR, OP_SAR,
-    OP_JMP, OP_JZ, OP_JNZ, OP_JN, OP_CALL, OP_RET, OP_IRET,
+    OP_ADD, OP_ADDI, OP_SUB, OP_SUBI, OP_INC, OP_DEC,
+    OP_MUL, OP_MULI, OP_DIV, OP_DIVI, OP_MOD, OP_MODI,
+    OP_AND, OP_ANDI, OP_NAND, OP_NANDI, OP_NOR, OP_NORI, OP_OR, OP_ORI, OP_XOR, OP_XORI,
+    OP_NOT, OP_CMP, OP_CMPI,
+    OP_SHL, OP_SHLI, OP_SHR, OP_SHRI, OP_SAR, OP_SARI,
+    OP_JMP, OP_JZ, OP_JNZ, OP_JN, OP_CALL, OP_RET,
     OP_MOV, OP_LI, OP_READ, OP_WRITE, OP_PUSH, OP_POP, OP_SWAP_R, OP_SWAP_M,
-    OP_INT, OP_WAIT, OP_GET_KEY, OP_OUT_KEY, OP_MEM_FAULT, OP_NMI
+    OP_INT, OP_WAIT, OP_GET_KEY, OP_OUT_KEY, OP_MEM_FAULT, OP_NMI, OP_DIS_INT, OP_ENA_INT
 };
 
 struct Flags {
@@ -46,12 +50,18 @@ struct CPU{
     bool interrupts_enabled;
 };
 
+void call_interrupt(struct CPU *cpu, const enum INTERRUPTS interrupt);
 static inline void set_flags(struct Flags *flags, const uint16_t result) {
     flags->Zero = !result;
     flags->Negative = (bool) (result >> 15) & 0x1;
 }
-static inline uint16_t fetch(const struct CPU *cpu, const uint16_t addr) {
-    return cpu->mem[(addr >> 1) % cpu->mem_size];;
+static inline uint16_t fetch(struct CPU *cpu) {
+    if (CHECK_MEM(cpu->pc >> 1, cpu)) {
+        cpu->regs[2]= cpu->pc;
+        call_interrupt(cpu, MEMORY_FAULT);
+    }
+    cpu->pc += INSTR_LEN;
+    return cpu->mem[(cpu->pc - INSTR_LEN) >> 1];
 }
 static inline void disable_interrupts(struct CPU *cpu) {
     cpu->interrupts_enabled = false;
@@ -94,9 +104,6 @@ uint16_t push(struct CPU *cpu, const uint16_t r_src);
 uint16_t pop(struct CPU *cpu, const uint16_t r_dest);
 void swap_r(struct CPU *cpu, const uint16_t r_dest, const uint16_t r_src);
 void swap_m(struct CPU *cpu, const uint16_t m_dest, const uint16_t m_src);
-
-void call_interrupt(struct CPU *cpu, const enum INTERRUPTS interrupt);
-#define CHECK_MEM(x, cpu) ((x) >= (cpu)->mem_size)
 
 
 #endif //DOGWATER_16_MAIN_H
