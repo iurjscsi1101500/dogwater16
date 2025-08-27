@@ -53,8 +53,8 @@ struct CPU{
 
 void call_interrupt(struct CPU *cpu, const enum INTERRUPTS interrupt);
 static inline void set_flags(struct Flags *flags, const uint32_t result) {
-    flags->Zero = !result;
-    flags->Negative = (bool) (result >> 31) & 0x1;
+    flags->Zero = (result == 0);
+    flags->Negative = (bool) ((result >> 31) & 0x1);
 }
 static inline uint32_t fetch(struct CPU *cpu) {
     if (CHECK_MEM(cpu->pc >> 2, cpu)) {

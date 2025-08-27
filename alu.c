@@ -10,16 +10,13 @@ inline uint32_t add(const uint32_t a, const uint32_t b, struct Flags *flags) {
     return main_result;
 }
 inline uint32_t sub(const uint32_t a, const uint32_t b, struct Flags *flags) {
-    uint32_t result;
-    if (a >= b) {
-        result = a - b;
-        flags->Negative = false;
-    } else {
-        result = b - a;
-        flags->Negative = true;
-    }
-    flags->Zero = (result == 0);
-    return result;
+    const uint64_t result = (uint64_t) a - (uint64_t) b;
+
+    if (result > MAX) ERR("add overflow\n");
+    const uint32_t main_result = (uint32_t) result;
+    set_flags(flags, main_result);
+
+    return main_result;
 }
 inline uint32_t inc(const uint32_t a, struct Flags *flags) {
     return add(a, 1, flags);
