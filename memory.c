@@ -26,6 +26,36 @@ inline uint32_t write_(struct CPU *cpu, const uint32_t mem ,const uint32_t r_src
     cpu->mem[mem + offset] = cpu->regs[r_src];
     return cpu->mem[mem + offset];
 }
+inline uint32_t readb(struct CPU *cpu, const uint32_t r_dest, uint32_t base, const uint32_t off) {
+    uint32_t v = read_(cpu, r_dest, base, off) & 0xFFu;
+    cpu->regs[r_dest] = v;
+    set_flags(&cpu->flags, v);
+    return v;
+}
+
+inline uint32_t readh(struct CPU *cpu, const uint32_t r_dest, uint32_t base, const uint32_t off) {
+    uint32_t v = (read_(cpu, r_dest, base, off) & 0xFFu)
+               | ((read_(cpu, r_dest, base, off + 1u) & 0xFFu) << 8);
+    cpu->regs[r_dest] = v;
+    set_flags(&cpu->flags, v);
+    return v;
+}
+
+inline void writeb(struct CPU *cpu, uint32_t base, const uint32_t r_src, uint32_t off) {
+    uint32_t save = cpu->regs[r_src];
+    cpu->regs[r_src] = save & 0xFFu;
+    (void)write_(cpu, base, r_src, off);
+    cpu->regs[r_src] = save;
+}
+
+inline void writeh(struct CPU *cpu, uint32_t base, const uint32_t r_src, uint32_t off) {
+    uint32_t save = cpu->regs[r_src];
+    cpu->regs[r_src] = save & 0xFFu;
+    (void)write_(cpu, base, r_src, off);
+    cpu->regs[r_src] = (save >> 8) & 0xFFu;
+    (void)write_(cpu, base, r_src, off + 1u);
+    cpu->regs[r_src] = save;
+}
 inline uint32_t push(struct CPU *cpu, const uint32_t r_src) {
     cpu->mem[--cpu->sp] = cpu->regs[r_src & LR];
     return cpu->mem[cpu->sp];

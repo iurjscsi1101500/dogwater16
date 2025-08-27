@@ -81,6 +81,11 @@ int cpu_step(struct CPU *cpu){
         case OP_LI: li(cpu,rd,fetch(cpu)); return 2;
         case OP_READ: (void)read_(cpu,rd,rs,fetch(cpu)); return 2;
         case OP_WRITE: (void)write_(cpu,rd,rs,fetch(cpu)); return 2;
+	case OP_READB: (void)readb(cpu, rd, rs, fetch(cpu)); return 2;
+	case OP_READH: (void)readh(cpu, rd, rs, fetch(cpu)); return 2;
+	case OP_WRITEB: (void)writeb(cpu, rd, rs, fetch(cpu)); return 2;
+	case OP_WRITEH: (void)writeh(cpu, rd, rs, fetch(cpu)); return 2;
+
         case OP_PUSH: (void)push(cpu,rs); return 2;
         case OP_POP: (void)pop(cpu,rd); return 2;
         case OP_SWAP_R: swap_r(cpu,rd,rs); return 1;

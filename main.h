@@ -33,7 +33,7 @@ enum OPCODE {
     OP_JMP, OP_JZ, OP_JNZ, OP_JN, OP_CALL, OP_RET,
     OP_MOV, OP_MOVK, OP_RMOVK, OP_LI, OP_READ, OP_WRITE, OP_PUSH, OP_POP, OP_SWAP_R, OP_SWAP_M,
     OP_INT, OP_DIS_INT, OP_ENA_INT,
-    OP_HLT, OP_LEA, OP_SLTU, OP_BLO
+    OP_HLT, OP_LEA, OP_SLTU, OP_BLO, OP_READB, OP_READH, OP_WRITEB, OP_WRITEH
 };
 
 struct Flags {
@@ -103,6 +103,10 @@ void li(struct CPU *cpu, const uint32_t r_dest, const uint32_t r_val);
 //do this otherwise gcc throws
 uint32_t read_(struct CPU *cpu, const uint32_t reg ,const uint32_t m_src, const uint32_t offset);
 uint32_t write_(struct CPU *cpu, const uint32_t mem ,const uint32_t r_src, const uint32_t offset);
+uint32_t readb(struct CPU *cpu, const uint32_t r_dest, uint32_t base, const uint32_t off);
+uint32_t readh(struct CPU *cpu, const uint32_t r_dest, uint32_t base, const uint32_t off);
+void writeb(struct CPU *cpu, uint32_t base, const uint32_t r_src, uint32_t off);
+void writeh(struct CPU *cpu, uint32_t base, const uint32_t r_src, uint32_t off);
 uint32_t push(struct CPU *cpu, const uint32_t r_src);
 uint32_t pop(struct CPU *cpu, const uint32_t r_dest);
 void swap_r(struct CPU *cpu, const uint32_t r_dest, const uint32_t r_src);

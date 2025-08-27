@@ -1,0 +1,8 @@
+main:
+DATA: DD #0x48656C6C
+LI     R0, DATA
+READB  R1, R0, #0x0
+MOVK   R1
+INT    #0x1
+HLT
+
