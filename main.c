@@ -85,6 +85,13 @@ int cpu_step(struct CPU *cpu){
 	case OP_READH: (void)readh(cpu, rd, rs, fetch(cpu)); return 2;
 	case OP_WRITEB: (void)writeb(cpu, rd, rs, fetch(cpu)); return 2;
 	case OP_WRITEH: (void)writeh(cpu, rd, rs, fetch(cpu)); return 2;
+	case OP_READR:   (void)read_(cpu,  rd, rs, cpu->regs[fetch(cpu) & 0xF]); return 2;
+	case OP_WRITER:  (void)write_(cpu, rd, rs, cpu->regs[fetch(cpu) & 0xF]); return 2;
+	case OP_READBR:  (void)readb(cpu,  rd, rs, cpu->regs[fetch(cpu) & 0xF]); return 2;
+	case OP_READHR:  (void)readh(cpu,  rd, rs, cpu->regs[fetch(cpu) & 0xF]); return 2;
+	case OP_WRITEBR: (void)writeb(cpu, rd, rs, cpu->regs[fetch(cpu) & 0xF]); return 2;
+	case OP_WRITEHR: (void)writeh(cpu, rd, rs, cpu->regs[fetch(cpu) & 0xF]); return 2;
+	case OP_LEAR:    cpu->regs[rd] = add(cpu->regs[rs], cpu->regs[fetch(cpu) & 0xF], &cpu->flags); return 2;
 
         case OP_PUSH: (void)push(cpu,rs); return 2;
         case OP_POP: (void)pop(cpu,rd); return 2;

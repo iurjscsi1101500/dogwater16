@@ -14,14 +14,14 @@ start:
     LI    R1, 0x0A646C72      // "rld\n"
     WRITEB R0, R1, 8
 
-    // print 12 bytes: pointer in R0, countdown in R2
+    // print 4 32-bit
     LI    R0, msg
-    LI    R2, 12
+    LI    R2, 4
 loop:
-    READB  R1, R0, 0
+    READBR  R1, R0, R8
     MOVK   R1
     INT    PRINT_INT
-    INC    R0
+    INC    R8
     DEC    R2
     JNZ    loop
 

@@ -1,5 +1,5 @@
-#guys this was written by chatgpt because i am too lazy to write an assmbler
 import os, sys
+
 OPC = {
  "NOP":0,"ADD":1,"ADDI":2,"SUB":3,"SUBI":4,"INC":5,"DEC":6,
  "MUL":7,"MULI":8,"DIV":9,"DIVI":10,"MOD":11,"MODI":12,
@@ -8,16 +8,22 @@ OPC = {
  "SHL":26,"SHLI":27,"SHR":28,"SHRI":29,"SAR":30,"SARI":31,
  "JMP":32,"JZ":33,"JNZ":34,"JN":35,"CALL":36,"RET":37,
  "MOV":38,"MOVK":39,"RMOVK":40,"LI":41,"READ":42,"WRITE":43,
- "PUSH":44,"POP":45,"SWAP_R":46,"SWAP_M":47,"INT":48,"DIS_INT":49,"ENA_INT":50,"HLT":51,"LEA":52,"SLTU":53,"BLO":54,"READB":55, "READH":56, "WRITEB":57, "WRITEH":58
+ "PUSH":44,"POP":45,"SWAP_R":46,"SWAP_M":47,"INT":48,"DIS_INT":49,"ENA_INT":50,"HLT":51,"LEA":52,"SLTU":53,"BLO":54,
+ "READB":55,"READH":56,"WRITEB":57,"WRITEH":58,
+ "READR":59,"WRITER":60,"READBR":61,"READHR":62,"WRITEBR":63,"WRITEHR":64,"LEAR":65
 }
+
 SZ = {
  "NOP":1,"ADD":1,"SUB":1,"INC":1,"DEC":1,"MUL":1,"DIV":1,"MOD":1,
  "AND":1,"NAND":1,"NOR":1,"OR":1,"XOR":1,"NOT":1,"CMP":1,
  "SHL":1,"SHR":1,"SAR":1,"MOV":1,"MOVK":1,"RMOVK":1,"SWAP_R":1,"DIS_INT":1,"ENA_INT":1,"HLT":1,"RET":1,
  "ADDI":2,"SUBI":2,"MULI":2,"DIVI":2,"MODI":2,"ANDI":2,"NANDI":2,"NORI":2,"ORI":2,"XORI":2,
  "CMPI":2,"SHLI":2,"SHRI":2,"SARI":2,"JMP":2,"JZ":2,"JNZ":2,"JN":2,"CALL":2,
- "LI":2,"READ":2,"WRITE":2,"INT":2,"SWAP_M":2,"PUSH":2,"POP":2,"LEA":2,"SLTU":1,"BLO":2,"READB":2, "READH":2, "WRITEB":2, "WRITEH":2
+ "LI":2,"READ":2,"WRITE":2,"INT":2,"SWAP_M":2,"PUSH":2,"POP":2,"LEA":2,"SLTU":1,"BLO":2,
+ "READB":2,"READH":2,"WRITEB":2,"WRITEH":2,
+ "READR":2,"WRITER":2,"READBR":2,"READHR":2,"WRITEBR":2,"WRITEHR":2,"LEAR":2
 }
+
 def assemble(lines):
     import re, struct
     if isinstance(lines,str): lines=lines.splitlines()
@@ -92,15 +98,18 @@ def assemble(lines):
         elif M in {"PUSH","MOVK"}:
             if len(ops)!=1: raise ValueError(f"line {ln}: {M} rs")
             rs=get_reg(ops[0],ln)
-        elif M in {"MOV","SWAP_R","SWAP_M","ADD","SUB","MUL","DIV","MOD","AND","NAND","NOR","OR","XOR","CMP","SHL","SHR","SAR", "SLTU"}:
+        elif M in {"MOV","SWAP_R","SWAP_M","ADD","SUB","MUL","DIV","MOD","AND","NAND","NOR","OR","XOR","CMP","SHL","SHR","SAR","SLTU"}:
             if len(ops)!=2: raise ValueError(f"line {ln}: {M} rd,rs")
             rd,rs=get_reg(ops[0],ln),get_reg(ops[1],ln)
         elif M in {"ADDI","SUBI","MULI","DIVI","MODI","ANDI","NANDI","NORI","ORI","XORI","CMPI","SHLI","SHRI","SARI","LI"}:
             if len(ops)!=2: raise ValueError(f"line {ln}: {M} rd,imm")
             rd=get_reg(ops[0],ln);extra=val32(ops[1],ln)
-        elif M in {"READ","WRITE", "LEA", "BLO","READB", "READH", "WRITEB", "WRITEH"}:
+        elif M in {"READ","WRITE","LEA","BLO","READB","READH","WRITEB","WRITEH"}:
             if len(ops)!=3: raise ValueError(f"line {ln}: {M} rd,rs,imm")
             rd,rs=get_reg(ops[0],ln),get_reg(ops[1],ln);extra=val32(ops[2],ln)
+        elif M in {"READR","WRITER","READBR","READHR","WRITEBR","WRITEHR","LEAR"}:
+            if len(ops)!=3: raise ValueError(f"line {ln}: {M} rd,rs,rt")
+            rd=get_reg(ops[0],ln);rs=get_reg(ops[1],ln);rt=get_reg(ops[2],ln);extra=rt&0xF
         elif M in {"JMP","JZ","JNZ","JN","CALL","INT"}:
             if len(ops)!=1: raise ValueError(f"line {ln}: {M} imm")
             extra=val32(ops[0],ln)
@@ -108,10 +117,6 @@ def assemble(lines):
         out+=enc_hdr(OPC[M],rd,rs)
         if SZ[M]==2: out+=u32(extra if extra is not None else 0)
     return bytes(out)
-
-if len(sys.argv) != 2:
-    print(f"Usage: python3 {sys.argv[0]} filename")
-    sys.exit(1)
 
 name = sys.argv[1]
 with open(name, "r") as f:
