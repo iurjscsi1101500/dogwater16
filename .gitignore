@@ -1,3 +1,5 @@
-.o
+*.o
+emu
+*.bin
 .idea/
 .vscode/

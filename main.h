@@ -15,7 +15,7 @@
 #define OPC(w) (((w) >> 10) & 0x3F)
 #define RD(w)  (((w) >> 6)  & 0x0F)
 #define RS(w)  (((w) >> 2)  & 0x0F)
-
+#define TMP 3
 enum INTERRUPTS {
     KEYBOARD_READ,
     KEYBOARD_WRITE,
@@ -43,7 +43,7 @@ struct CPU{
     uint32_t pc;
     uint32_t sp;
     uint32_t regs[16];   // reg[7] used for stack call/ret, reg[2] used by interrupts
-    uint8_t keyboard_reg;
+    uint32_t keyboard_reg;
     struct Flags flags;
     uint32_t *mem;
     size_t mem_size;

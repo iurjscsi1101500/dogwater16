@@ -81,7 +81,7 @@ REGISTERS
  0  : R0   (GP)
  1  : R1   (GP)
  2  : R2   (Reserved - used by interrupts)
- 3  : R3   (GP)
+ 3  : R3   (Reserved - used by read and write as temp buf)
  4  : R4   (GP)
  5  : R5   (GP)
  6  : R6   (GP)
