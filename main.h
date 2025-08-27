@@ -33,7 +33,7 @@ enum OPCODE {
     OP_JMP, OP_JZ, OP_JNZ, OP_JN, OP_CALL, OP_RET,
     OP_MOV, OP_MOVK, OP_RMOVK, OP_LI, OP_READ, OP_WRITE, OP_PUSH, OP_POP, OP_SWAP_R, OP_SWAP_M,
     OP_INT, OP_DIS_INT, OP_ENA_INT,
-    OP_HLT
+    OP_HLT, OP_LEA, OP_SLTU, OP_BLO
 };
 
 struct Flags {
@@ -87,6 +87,7 @@ uint32_t cmp (const uint32_t a, const uint32_t b, struct Flags *flags);
 uint32_t shl (const uint32_t a, const uint32_t n, struct Flags *flags);
 uint32_t shr (const uint32_t a, const uint32_t n, struct Flags *flags);
 uint32_t sar (const uint32_t a, const uint32_t n, struct Flags *flags);
+uint32_t sltu (const uint32_t a, const uint32_t b, struct Flags *flags);
 
 void nop(const struct CPU *cpu);
 void jmp(struct CPU *cpu, const uint32_t target_pc);
@@ -95,6 +96,7 @@ void jnz(struct CPU *cpu, const uint32_t target_pc);
 void jn(struct CPU *cpu, const uint32_t target_pc);
 void call(struct CPU *cpu, const uint32_t target_pc);
 void ret(struct CPU *cpu);
+void blo(struct CPU *cpu, const uint32_t target_pc, const uint32_t rd, const uint32_t rs);
 
 void mov(struct CPU *cpu, const uint32_t r_dest, const uint32_t r_src);
 void li(struct CPU *cpu, const uint32_t r_dest, const uint32_t r_val);

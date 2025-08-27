@@ -109,3 +109,9 @@ inline uint32_t sar(const uint32_t a, const uint32_t n, struct Flags *flags) {
     set_flags(flags, main_result);
     return main_result;
 }
+inline uint32_t sltu(const uint32_t a, const uint32_t b, struct Flags *flags) {
+    uint32_t r = a < b;
+    set_flags(flags, r);
+    return r;
+}
+

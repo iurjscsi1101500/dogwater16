@@ -21,3 +21,7 @@ inline void call(struct CPU *cpu, const uint32_t target_pc) {
 inline void ret(struct CPU *cpu) {
     cpu->pc = cpu->regs[LR];
 }
+inline void blo(struct CPU *cpu, const uint32_t target_pc, const uint32_t rd, const uint32_t rs) {
+    if (cpu->regs[rd] < cpu->regs[rs])
+         cpu->pc = target_pc;
+}

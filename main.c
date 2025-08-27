@@ -33,7 +33,6 @@ int cpu_step(struct CPU *cpu){
     const uint32_t rs=RS(insn);
 
     if (rd > 15 || rs > 15) ERR("bad register\n");
-    if (op > 51) ERR("bad opcode\n");
     switch(op){
         case OP_NOP: nop(cpu); return 1;
         case OP_ADD: cpu->regs[rd]=add(cpu->regs[rd],cpu->regs[rs],&cpu->flags); return 1;
@@ -53,7 +52,9 @@ int cpu_step(struct CPU *cpu){
         case OP_SHL: cpu->regs[rd]=shl(cpu->regs[rd],cpu->regs[rs],&cpu->flags); return 1;
         case OP_SHR: cpu->regs[rd]=shr(cpu->regs[rd],cpu->regs[rs],&cpu->flags); return 1;
         case OP_SAR: cpu->regs[rd]=sar(cpu->regs[rd],cpu->regs[rs],&cpu->flags); return 1;
+        case OP_SLTU: cpu->regs[rd]=sltu(cpu->regs[rd], cpu->regs[rs], &cpu->flags); return 1;
         case OP_ADDI: cpu->regs[rd]=add(cpu->regs[rd],fetch(cpu),&cpu->flags); return 2;
+        case OP_LEA: cpu->regs[rd]=add(cpu->regs[rs],fetch(cpu),&cpu->flags); return 2;
         case OP_SUBI: cpu->regs[rd]=sub(cpu->regs[rd],fetch(cpu),&cpu->flags); return 2;
         case OP_MULI: cpu->regs[rd]=mul(cpu->regs[rd],fetch(cpu),&cpu->flags); return 2;
         case OP_DIVI: cpu->regs[rd]=divi(cpu->regs[rd],fetch(cpu),&cpu->flags); return 2;
@@ -73,6 +74,7 @@ int cpu_step(struct CPU *cpu){
         case OP_JN: jn(cpu,fetch(cpu)); return 2;
         case OP_CALL: call(cpu,fetch(cpu)); return 3;
         case OP_RET: ret(cpu); return 3;
+        case OP_BLO: blo(cpu, fetch(cpu), rd, rs); return 2;
         case OP_MOV: mov(cpu,rd,rs); return 1;
         case OP_MOVK: cpu->keyboard_reg = cpu->regs[rs]; return 1;
         case OP_RMOVK: cpu->regs[rd] = cpu->keyboard_reg; return 1;

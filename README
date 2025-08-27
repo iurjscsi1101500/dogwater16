@@ -9,7 +9,7 @@ Instruction Word Layout
    6 bits          4 bits          4 bits        18 bits
 
 Instruction Set
-
+NOTE: Negative number are discouraged because of bugs
 CONTROL
 -------
 NOP         - No operation
@@ -26,7 +26,7 @@ INC / DEC   - Increment / decrement
 MUL / MULI  - Multiply register or immediate
 DIV / DIVI  - Divide register or immediate
 MOD / MODI  - Modulo register or immediate
-
+LEA         - Load Effective Address
 BITWISE / LOGIC
 ---------------
 AND / ANDI   - Bitwise AND
@@ -35,11 +35,12 @@ NOR / NORI   - Bitwise NOR
 OR / ORI     - Bitwise OR
 XOR / XORI   - Bitwise XOR
 NOT          - Bitwise NOT
-
+BLO          -
 COMPARISON
 ----------
 CMP          - Compare registers
 CMPI         - Compare register with immediate
+SLTU         - RD < RS
 
 SHIFT / ROTATE
 --------------
@@ -55,6 +56,7 @@ JNZ          - Jump if zero flag not set
 JN           - Jump if negative flag set
 CALL         - Call subroutine
 RET          - Return from subroutine
+BLO          - If RD < RS Jump To Address
 
 DATA MOVEMENT
 -------------
